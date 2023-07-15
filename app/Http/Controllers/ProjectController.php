@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function index()
     {
         // show all projects
-        $projects = Project::all()->paginate(10);
+        $projects = Project::all();
         return [
             "data" => $projects
         ];
@@ -26,9 +26,10 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+            //
+
     }
 
     /**
@@ -39,7 +40,18 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //create new project
+
+        $request->validate([
+            'name' => 'required',
+            'creation_date' => 'required',
+        ]);
+    
+        $project = Project::create($request->all());
+        return [
+            "status" => 1,
+            "data" => $project
+        ];
     }
 
     /**
@@ -48,9 +60,13 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project)
     {
         //
+   return [
+            "data" =>$project
+        ];
+
 
     }
 
@@ -60,9 +76,12 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
         //
+
+        
+
     }
 
     /**
@@ -72,9 +91,21 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Project $project)
     {
         //
+
+        $request->validate([
+            'name' => 'required',
+            'creation_date' => 'required',
+        ]);
+
+        $project->update($request->all());
+
+        return [
+            "data" => $project,
+            "msg" => "Project updated successfully"
+        ];
     }
 
     /**
@@ -83,8 +114,14 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
         //
+
+        $project->delete();
+        return [
+            "data" => $project,
+            "msg" => "Project deleted successfully"
+        ];
     }
 }
